@@ -30,8 +30,10 @@ $ docker images
 ## ビルドしたイメージからコンテナを立ち上げる
 
 ```bash
-$ docker run -p 8080:8080 -v $(pwd)/app:/app -e DEBUG=true ws-flask-app:local
+$ docker run -p 8081:8080 -v $(pwd)/app:/app -e DEBUG=true ws-flask-app:local
 ```
+
+http://0.0.0.0:8081
 
 ## Artifact Registry にイメージをアップ
 
@@ -50,7 +52,7 @@ asia-northeast1-docker.pkg.dev/xxxxxxxxxxx/repo-xxxxxx-xxxxxxxx/ws-flask-app:lat
 記入欄
 
 ```plain
-xxxxx/ws-flask-app:latest
+asia-northeast1-docker.pkg.dev/env95-cloudruntraining/repo-haruto-horinouchi/ws-flask-app:latest
 ```
 
 ### イメージのビルド
@@ -68,7 +70,7 @@ $ docker build -t asia-northeast1-docker.pkg.dev/xxxxxxxxxxx/repo-xxxxxx-xxxxxxx
 記入欄
 
 ```plain
-docker build -t xxxxx/ws-flask-app:latest
+docker build -t asia-northeast1-docker.pkg.dev/env95-cloudruntraining/repo-haruto-horinouchi/ws-flask-app:latest .
 ```
 
 作成したイメージをリポジトリに置く
@@ -86,16 +88,17 @@ $ docker push asia-northeast1-docker.pkg.dev/xxxxxxxxxxx/repo-xxxxxx-xxxxxxxx/ws
 記入欄
 
 ```plain
-docker push xxxxx/ws-flask-app:latest
+docker push asia-northeast1-docker.pkg.dev/env95-cloudruntraining/repo-haruto-horinouchi/ws-flask-app:latest
 ```
 
 ## Cloud Runにデプロイ
 
 ```bash
-$ gcloud run deploy {アプリ名} \
-    --image {イメージのパス} \
-    --region asia-northeast1
-    --port 8080
+$ gcloud run deploy cloud-run-haruto-horinouchi \
+    --image asia-northeast1-docker.pkg.dev/env95-cloudruntraining/repo-haruto-horinouchi/ws-flask-app:latest \
+    --region asia-northeast1 \
+    --port 8080 \
+    --project env95-cloudruntraining
 ```
 
 例
@@ -131,5 +134,5 @@ $ gcloud run services proxy cloud-run-xxxxxx --region asia-northeast1
 記入欄
 
 ```bash
-$ gcloud run services proxy xxxxxx --region asia-northeast1
+$ gcloud run services proxy cloud-run-haruto-horinouchi --region asia-northeast1 --port 8082
 ```
